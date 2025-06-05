@@ -24,16 +24,16 @@ const fetchWeather = async (req:Request, res:Response): Promise<void> => {
         const nextFiveDays = data.list.filter((_:any, index: number) => index % 8 === 0);
 
         const result = nextFiveDays.map((item:any) => ({
-            data: item.dt_txt,
-            temperatura: item.main.temp,
-            descrição: item.weather[0].description,
-            icone: `https://openweathermap.org/img/wn/${item.weather[0].icon}.png`
+            date: item.dt_txt,
+            temperature: item.main.temp,
+            description: item.weather[0].description,
+            icon: `https://openweathermap.org/img/wn/${item.weather[0].icon}.png`
         }));
 
         res.json ({
-            cidade: data.city.name,
-            país: data.city.country,
-            previsão: result
+            city: data.city.name,
+            country: data.city.country,
+            forecast: result
         });
     } catch (erro) {
         console.error(erro);
