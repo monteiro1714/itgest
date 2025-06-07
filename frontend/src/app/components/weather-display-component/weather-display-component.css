@@ -1,0 +1,41 @@
+.weather-container {
+  width: 100vw;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fundo e animações para os diferentes estados */
+
+.weather-container.sunny {
+  background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+  /* exemplo de fundo amarelo quente */
+  animation: sunnyGlow 6s ease-in-out infinite alternate;
+}
+
+.weather-container.rainy {
+  background: linear-gradient(135deg, #a3bded 0%, #6991c7 100%);
+  /* exemplo de azul acinzentado */
+  animation: rainPulse 6s ease-in-out infinite alternate;
+}
+
+.weather-container.cloudy {
+  background: linear-gradient(135deg, #d7d2cc 0%, #304352 100%);
+  /* exemplo de cinza escuro */
+  animation: cloudyFade 6s ease-in-out infinite alternate;
+}
+
+@keyframes sunnyGlow {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.2); }
+}
+
+@keyframes rainPulse {
+  0% { filter: brightness(0.9); }
+  100% { filter: brightness(1.1); }
+}
+
+@keyframes cloudyFade {
+  0% { filter: brightness(0.8); }
+  100% { filter: brightness(1); }
+}
