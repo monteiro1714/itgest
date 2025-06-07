@@ -1,13 +1,48 @@
+<div *ngIf="weatherData" 
+     class="weather-container" 
+     [ngClass]="weatherData.conditionClass">
 
-   <div *ngIf="weatherData != null">
-    {{ weatherData | json}}
-    {{ weatherData.city}}
-    {{ weatherData.country}}
-    <div class="forecast-list">
-      <div class="card" *ngFor="let day of weatherData.forecast">
-        <p><strong>{{ day.date | date:'fullDate' }}</strong></p>
-        <img [src]="day.icon" [alt]="day.description" />
-        <p>{{ day.description }}</p>
-        <p>{{ day.temperature }} °C</p>
+  <div class="content-wrapper" style="position: relative; z-index: 10; padding: 2rem;">
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input 
+          class="input" 
+          type="text" 
+          [(ngModel)]="selectedCity" 
+          placeholder="Digite ou selecione uma cidade"
+          list="cities"
+        />
+        <datalist id="cities">
+          <option *ngFor="let city of cityList" [value]="city"></option>
+        </datalist>
       </div>
-   </div>
+      <div class="control">
+        <button class="button is-primary" (click)="getWeather()">Buscar</button>
+      </div>
+    </div>
+
+    <!-- Abas para navegar entre os dias -->
+    <div class="tabs is-toggle is-fullwidth mb-4">
+      <ul>
+        <li *ngFor="let day of weatherData.forecast; let i = index" 
+            [class.is-active]="i === selectedDayIndex">
+          <a (click)="selectDay(i)">
+            {{ day.date | date:'EEE, d MMM' }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Conteúdo do dia selecionado -->
+    <h2 class="title is-3 has-text-white">{{ weatherData.city }}, {{ weatherData.country }}</h2>
+
+    <p class="subtitle is-5 has-text-white">
+      {{ weatherData.forecast[selectedDayIndex].description }} - {{ weatherData.forecast[selectedDayIndex].temperature }} °C
+    </p>
+
+    <figure class="image is-96x96 is-inline-block">
+      <img [src]="weatherData.forecast[selectedDayIndex].icon" 
+           [alt]="weatherData.forecast[selectedDayIndex].description" />
+    </figure>
+  </div>
+</div>
