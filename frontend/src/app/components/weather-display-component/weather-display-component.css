@@ -1,41 +1,135 @@
-.weather-container {
+/* ---------- Página e fundo geral ---------- */
+.page-container {
+  height: 85vh;
   width: 100vw;
-  min-height: 100vh;
   position: relative;
   overflow: hidden;
 }
 
-/* Fundo e animações para os diferentes estados */
+.page-container::before {
+  content: "";
+  position: absolute;
+  top:0; left:0; right:0; bottom:0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 0;
+}
 
+
+/* ---------- Barra de pesquisa (inicialmente central, depois tipo navbar) ---------- */
+.search-bar {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90vw;
+  transition: all 0.5s ease;
+  backdrop-filter: blur(4px);
+}
+
+
+
+/* Inputs */
+.search-input {
+  flex-grow: 1;
+  font-size: 1.2rem;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: none;
+}
+
+.search-bar.compact .search-input {
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+
+/* Botão */
+.search-button {
+  font-size: 1.2rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.search-bar.compact .search-button {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+/* ---------- Container do tempo ---------- */
+.weather-container {
+  width: 100vw;
+  min-height: 84.3vh;
+  background-repeat: no-repeat;
+  background-size: 300% 100%;
+  background-position: left center;
+  transition: background-position 1.5s ease-in-out, transform 1.5s ease, filter 1.5s ease;
+  will-change: background-position, transform, filter;
+  position: relative;
+  z-index: 5;
+  padding-top: 5rem; /* Espaço para a barra no modo compacto */
+  color: white;
+}
+
+/* Efeito sutil de zoom ao trocar */
+.weather-container.day-0,
+.weather-container.day-1,
+.weather-container.day-2,
+.weather-container.day-3,
+.weather-container.day-4 {
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
+
+/* ---------- Temas climáticos ---------- */
 .weather-container.sunny {
-  background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
-  /* exemplo de fundo amarelo quente */
-  animation: sunnyGlow 6s ease-in-out infinite alternate;
+  background-image: linear-gradient(to right, #fceabb, #f8b500, #fceabb);
+  animation: sunnyPulse 8s ease-in-out infinite alternate;
 }
 
 .weather-container.rainy {
-  background: linear-gradient(135deg, #a3bded 0%, #6991c7 100%);
-  /* exemplo de azul acinzentado */
-  animation: rainPulse 6s ease-in-out infinite alternate;
+  background-image: linear-gradient(to right, #a3bded, #6991c7, #a3bded);
+  animation: rainyDrift 10s ease-in-out infinite alternate;
 }
 
 .weather-container.cloudy {
-  background: linear-gradient(135deg, #d7d2cc 0%, #304352 100%);
-  /* exemplo de cinza escuro */
-  animation: cloudyFade 6s ease-in-out infinite alternate;
+  background-image: linear-gradient(to right, #d7d2cc, #304352, #d7d2cc);
+  animation: cloudyGlow 10s ease-in-out infinite alternate;
 }
 
-@keyframes sunnyGlow {
-  0% { filter: brightness(1); }
-  100% { filter: brightness(1.2); }
+/* ---------- Posições do background por dia ---------- */
+.weather-container.day-0 {
+  background-position: 0% center;
+}
+.weather-container.day-1 {
+  background-position: 25% center;
+}
+.weather-container.day-2 {
+  background-position: 50% center;
+}
+.weather-container.day-3 {
+  background-position: 75% center;
+}
+.weather-container.day-4 {
+  background-position: 100% center;
 }
 
-@keyframes rainPulse {
-  0% { filter: brightness(0.9); }
-  100% { filter: brightness(1.1); }
+/* ---------- Animações ---------- */
+@keyframes sunnyPulse {
+  0%   { filter: brightness(1) saturate(1); }
+  100% { filter: brightness(1.2) saturate(1.2); }
 }
 
-@keyframes cloudyFade {
-  0% { filter: brightness(0.8); }
-  100% { filter: brightness(1); }
+@keyframes rainyDrift {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(-10deg); }
+}
+
+@keyframes cloudyGlow {
+  0%   { filter: brightness(0.9) contrast(1); }
+  100% { filter: brightness(1.1) contrast(1.05); }
 }

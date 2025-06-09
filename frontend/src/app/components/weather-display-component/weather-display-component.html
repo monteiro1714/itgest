@@ -1,48 +1,55 @@
-<div *ngIf="weatherData" 
-     class="weather-container" 
-     [ngClass]="weatherData.conditionClass">
+<div class="page-container"  [ngStyle]="{
+    'background-image': 'url(background.jpeg)',
+    'background-repeat': 'no-repeat',
+    'background-size': 'cover',
+    'background-position': 'center center'
+  }" [ngClass]="{'has-weather': weatherData} ">
 
-  <div class="content-wrapper" style="position: relative; z-index: 10; padding: 2rem;">
-    <div class="field has-addons">
-      <div class="control is-expanded">
-        <input 
-          class="input" 
-          type="text" 
-          [(ngModel)]="selectedCity" 
-          placeholder="Digite ou selecione uma cidade"
-          list="cities"
-        />
-        <datalist id="cities">
-          <option *ngFor="let city of cityList" [value]="city"></option>
-        </datalist>
+  <!-- Barra de Pesquisa (sempre visível, muda estilo com base em weatherData) -->
+  <div *ngIf="showSearchBar" class="search-bar" [ngClass]="{'compact': weatherData}">
+    <input 
+      class="input search-input" 
+      type="text" 
+      [(ngModel)]="selectedCity" 
+      placeholder="Digite uma cidade"
+      (keyup.enter)="getWeather()"
+    />
+    <button class="button is-primary search-button" (click)="getWeather()">Pesquisar</button>
+  </div>
+
+  <!-- Conteúdo do Clima (aparece só após busca) -->
+  <div *ngIf="weatherData" 
+       class="weather-container" 
+       [ngClass]="[weatherData.conditionClass, 'day-' + selectedDayIndex]"
+       [ngStyle]="{ 'background-position': getBackgroundPosition() }">
+
+    <div class="content-wrapper" style="position: relative; z-index: 10; padding: 2rem;">
+      
+      <!-- Navegação por dias -->
+      <div class="tabs is-toggle is-fullwidth mb-4">
+        <ul>
+          <li *ngFor="let day of weatherData.forecast; let i = index" 
+              [class.is-active]="i === selectedDayIndex">
+            <a (click)="selectDay(i)">
+              {{ (day.date | date:'EEEE, d ' ) + 'de ' + (day.date | date:'MMMM') | titlecase }}
+            </a>
+          </li>
+        </ul>
       </div>
-      <div class="control">
-        <button class="button is-primary" (click)="getWeather()">Buscar</button>
-      </div>
+
+      <!-- Informações do dia selecionado -->
+      <h2 class="title is-3 has-text-white">{{ weatherData.city }}, {{ weatherData.country }}</h2>
+
+      <p class="subtitle is-5 has-text-white">
+        {{ weatherData.forecast[selectedDayIndex].description }} - 
+        {{ weatherData.forecast[selectedDayIndex].temperature }} °C
+      </p>
+
+      <figure class="image is-96x96 is-inline-block">
+        <img [src]="weatherData.forecast[selectedDayIndex].icon" 
+             [alt]="weatherData.forecast[selectedDayIndex].description" />
+      </figure>
+      
     </div>
-
-    <!-- Abas para navegar entre os dias -->
-    <div class="tabs is-toggle is-fullwidth mb-4">
-      <ul>
-        <li *ngFor="let day of weatherData.forecast; let i = index" 
-            [class.is-active]="i === selectedDayIndex">
-          <a (click)="selectDay(i)">
-            {{ day.date | date:'EEE, d MMM' }}
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Conteúdo do dia selecionado -->
-    <h2 class="title is-3 has-text-white">{{ weatherData.city }}, {{ weatherData.country }}</h2>
-
-    <p class="subtitle is-5 has-text-white">
-      {{ weatherData.forecast[selectedDayIndex].description }} - {{ weatherData.forecast[selectedDayIndex].temperature }} °C
-    </p>
-
-    <figure class="image is-96x96 is-inline-block">
-      <img [src]="weatherData.forecast[selectedDayIndex].icon" 
-           [alt]="weatherData.forecast[selectedDayIndex].description" />
-    </figure>
   </div>
 </div>
