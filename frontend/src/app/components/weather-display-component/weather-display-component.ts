@@ -14,11 +14,6 @@ import { ForecastResponse } from '../../interfaces/weatherInterface';
   styleUrl: './weather-display-component.css'
 })
 export class WeatherDisplayComponent implements OnInit {
-   weatherData: (ForecastResponse & { conditionClass?: string }) | null = null;
-  selectedCity: string = '';
-  cityList: string[] = [];
-
-  selectedDayIndex: number = 0; // índice do dia selecionado
 
   constructor(
     private weatherService: WeatherService, 
@@ -26,12 +21,25 @@ export class WeatherDisplayComponent implements OnInit {
     private router: Router
   ) { }
 
+   weatherData: (ForecastResponse & { conditionClass?: string }) | null = null;
+  selectedCity: string = '';
+  showSearchBar: boolean = true; 
+
+
+  selectedDayIndex: number = 0; // índice do dia selecionado
+
+  
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const city = params['city'] || 'Lisboa';
+      const city = params['city'] || '';
       this.selectedCity = city;
-
-      this.fetchWeather(city);
+      if (city) {
+        this.fetchWeather(city);
+        this.showSearchBar = false; 
+      } else {
+        this.weatherData = null; // Reseta os dados se não houver cidade selecionada
+      }
     });
   }
 
@@ -83,4 +91,11 @@ export class WeatherDisplayComponent implements OnInit {
     }
     return 'sunny';
   }
+
+  getBackgroundPosition(): string {
+  const totalDays = this.weatherData?.forecast.length || 1;
+  const step = 100 / (totalDays - 1);
+  return `${step * this.selectedDayIndex}% center`;
+}
+
 }

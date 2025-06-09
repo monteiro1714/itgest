@@ -1,0 +1,22 @@
+footer {
+    height: 7vh;
+}
+
+footer .icons i {
+  font-size: 1.5rem;
+  transition: color 0.3s;
+}
+footer .icons a:hover i {
+  color: #00d1b2; 
+}
+
+footer.footer {
+  padding: 0.75rem 1rem; 
+  font-size: 0.9rem;     
+  line-height: 0.5;      
+
+  
+
+
+}
+
