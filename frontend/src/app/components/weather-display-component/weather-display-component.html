@@ -1,55 +1,66 @@
-<div class="page-container"  [ngStyle]="{
-    'background-image': 'url(background.jpeg)',
-    'background-repeat': 'no-repeat',
-    'background-size': 'cover',
-    'background-position': 'center center'
-  }" [ngClass]="{'has-weather': weatherData} ">
+<div class="page-container" 
+     [ngStyle]="{
+       'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(background.jpeg)',
+       'background-repeat': 'no-repeat',
+       'background-size': 'cover',
+       'background-position': 'center center'
+     }" 
+     [ngClass]="{'has-weather': weatherData}">
 
-  <!-- Barra de Pesquisa (sempre visível, muda estilo com base em weatherData) -->
-  <div *ngIf="showSearchBar" class="search-bar" [ngClass]="{'compact': weatherData}">
+  <!-- Mensagem de boas-vindas (aparece se não tiver dados, mesmo que tenha erro) -->
+  <div *ngIf="!weatherData" class="welcome-message">
+    <h1>Bem-vindo! 🌤️</h1>
+    <p>Pesquise por uma cidade ou país para consultar a previsão do tempo.</p>
+  </div>
+
+  <!-- Cidade e previsão (aparece só se houver dados e não houver erro) -->
+  <div *ngIf="weatherData && !errorMessage" class="city-message has-text-centered">
+    <h1>{{ weatherData.city }}, {{ weatherData.country }}</h1>
+    
+    <div class="day-list-vertical-wrapper">
+      <ul class="day-list-vertical">
+        <li *ngFor="let day of weatherData.forecast; let i = index"
+            [class.active]="i === selectedDayIndex"
+            (click)="selectDay(i)">
+          <div class="day-item">
+            <div class="day-date">
+              {{ (day.date | date:'EEEE' | titlecase) }}, {{ day.date | date:'d' }} de {{ (day.date | date:'MMMM') | titlecase }}
+            </div>
+            <div class="day-description">
+              {{ day.description | titlecase }}
+            </div>
+            <div class="day-icon">
+              <img [src]="day.icon" [alt]="day.description" />
+            </div>
+            <div class="temp-bar-container">
+              <div class="temp-bar"
+                   [style.width]="getBarWidth(day.temperature)"
+                   [style.backgroundColor]="getBarColor(day.temperature)">
+              </div>
+            </div>
+            <div class="day-temp">
+              {{ day.temperature }}°C
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Barra de pesquisa (aparece se não houver dados ou se houver erro) -->
+  <div *ngIf="!weatherData || errorMessage" class="search-bar" [ngClass]="{'compact': weatherData}">
     <input 
       class="input search-input" 
       type="text" 
       [(ngModel)]="selectedCity" 
-      placeholder="Digite uma cidade"
+      placeholder="Ex: Lisboa"
       (keyup.enter)="getWeather()"
     />
-    <button class="button is-primary search-button" (click)="getWeather()">Pesquisar</button>
+    <button class="button is-link search-button" (click)="getWeather()">Pesquisar</button>
   </div>
 
-  <!-- Conteúdo do Clima (aparece só após busca) -->
-  <div *ngIf="weatherData" 
-       class="weather-container" 
-       [ngClass]="[weatherData.conditionClass, 'day-' + selectedDayIndex]"
-       [ngStyle]="{ 'background-position': getBackgroundPosition() }">
-
-    <div class="content-wrapper" style="position: relative; z-index: 10; padding: 2rem;">
-      
-      <!-- Navegação por dias -->
-      <div class="tabs is-toggle is-fullwidth mb-4">
-        <ul>
-          <li *ngFor="let day of weatherData.forecast; let i = index" 
-              [class.is-active]="i === selectedDayIndex">
-            <a (click)="selectDay(i)">
-              {{ (day.date | date:'EEEE, d ' ) + 'de ' + (day.date | date:'MMMM') | titlecase }}
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Informações do dia selecionado -->
-      <h2 class="title is-3 has-text-white">{{ weatherData.city }}, {{ weatherData.country }}</h2>
-
-      <p class="subtitle is-5 has-text-white">
-        {{ weatherData.forecast[selectedDayIndex].description }} - 
-        {{ weatherData.forecast[selectedDayIndex].temperature }} °C
-      </p>
-
-      <figure class="image is-96x96 is-inline-block">
-        <img [src]="weatherData.forecast[selectedDayIndex].icon" 
-             [alt]="weatherData.forecast[selectedDayIndex].description" />
-      </figure>
-      
-    </div>
+  <!-- Mensagem de erro (aparece se houver erro) -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
   </div>
 </div>
