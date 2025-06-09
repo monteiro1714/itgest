@@ -21,9 +21,10 @@ export class WeatherDisplayComponent implements OnInit {
     private router: Router
   ) { }
 
-   weatherData: (ForecastResponse & { conditionClass?: string }) | null = null;
+  weatherData: (ForecastResponse & { conditionClass?: string }) | null = null;
   selectedCity: string = '';
   showSearchBar: boolean = true; 
+  errorMessage: string = ''; // Mensagem de erro para exibir se a cidade não for encontrada
 
 
   selectedDayIndex: number = 0; // índice do dia selecionado
@@ -53,20 +54,28 @@ export class WeatherDisplayComponent implements OnInit {
   }
 
   private fetchWeather(city: string): void {
+    this.errorMessage = ''; // Reseta mensagem de erro
     this.weatherService.getForecast(city).subscribe({
       next: (data: ForecastResponse) => {
+        // Verifica se a cidade foi identificada
+        if (!data || !data.forecast || data.forecast.length === 0) {
+          this.weatherData = null; // Reseta os dados se não houver previsão
+          this.errorMessage = 'Cidade/País não encontrado. Por favor, tente novamente.';
+          return;
+        }
         // Quando chegar novos dados, resetar seleção para o primeiro dia
         this.selectedDayIndex = 0;
 
         // Atualiza classe conforme o primeiro dia
         const firstDayDescription = data.forecast.length > 0 ? data.forecast[0].description : '';
         const conditionClass = this.getConditionClass(firstDayDescription);
-
         this.weatherData = { ...data, conditionClass };
+        this.errorMessage = ''; // Reseta mensagem de erro
       },
       error: (error: any) => {
         console.error('Error fetching weather data:', error);
         this.weatherData = null;
+        this.errorMessage = 'Não foi possível obter dados. Por favor, insira uma cidade válida.';
       }
     });
   }
@@ -81,7 +90,6 @@ export class WeatherDisplayComponent implements OnInit {
   }
 
   private getConditionClass(description: string): string {
-    description = description.toLowerCase();
     if (description.includes('sol') || description.includes('claro')) {
       return 'sunny';
     } else if (description.includes('chuva') || description.includes('rain')) {
@@ -92,10 +100,20 @@ export class WeatherDisplayComponent implements OnInit {
     return 'sunny';
   }
 
-  getBackgroundPosition(): string {
-  const totalDays = this.weatherData?.forecast.length || 1;
-  const step = 100 / (totalDays - 1);
-  return `${step * this.selectedDayIndex}% center`;
+ 
+
+getBarWidth(temp: number): string {
+  const min = -10;
+  const max = 45;
+  const percent = Math.max(0, Math.min(100, ((temp - min) / (max - min)) * 100));
+  return `${percent}%`;
 }
 
+getBarColor(temp: number): string {
+  if (temp <= 0) return '#00bfff';       // Azul claro
+  if (temp <= 15) return '#40e0d0';      // Turquesa
+  if (temp <= 25) return '#f9d423';      // Amarelo
+  if (temp <= 35) return '#fc913a';      // Laranja
+  return '#ff4e50';                      // Vermelho
+}
 }
