@@ -21,7 +21,7 @@ const fetchWeather = async (req:Request, res:Response): Promise<void> => {
 
         const data = await response.json();
 
-        const nextFiveDays = data.list.filter((_:any, index: number) => index % 8 === 0);
+        const nextFiveDays = data.list.filter((_:any, index: number) => index % 8 === 0); 
 
         const result = nextFiveDays.map((item:any) => ({
             date: item.dt_txt,
@@ -37,7 +37,7 @@ const fetchWeather = async (req:Request, res:Response): Promise<void> => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({error:'Erro interno ao obter dados metereológicos'});
+        res.status(500).json({error:'Internal server error fetching weather data'});
     }
 };
 

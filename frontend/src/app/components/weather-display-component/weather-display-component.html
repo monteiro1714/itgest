@@ -1,11 +1,20 @@
+
+<!-- Loader da imagem -->
+<div *ngIf="imageLoading" class="loading-overlay">
+  <span class="loader"></span>
+</div>
+
 <div class="page-container" 
      [ngStyle]="{
-       'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(background.jpeg)',
+       'background-image': cityImageUrl ? 
+         'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(' + cityImageUrl + ')' :
+         'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(background.jpeg)',
        'background-repeat': 'no-repeat',
        'background-size': 'cover',
        'background-position': 'center center'
      }" 
      [ngClass]="{'has-weather': weatherData}">
+
 
   <!-- Mensagem de boas-vindas (aparece se não tiver dados, mesmo que tenha erro) -->
   <div *ngIf="!weatherData" class="welcome-message">
