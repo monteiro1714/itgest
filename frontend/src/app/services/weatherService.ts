@@ -17,4 +17,9 @@ export class WeatherService {
   getForecast(city: string): Observable<ForecastResponse> {
     return this.http.get<ForecastResponse>(`${this.apiUrl}/${city}`);
   }
+
+  getCityImage(city: string): Observable<{ imageUrl: string }> {
+    return this.http.get<{ imageUrl: string }>(`${this.apiUrl}/${city}/image`);
+  }
+
 }

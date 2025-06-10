@@ -25,6 +25,48 @@ export class WeatherDisplayComponent implements OnInit {
   selectedCity: string = '';
   showSearchBar: boolean = true; 
   errorMessage: string = ''; // Mensagem de erro para exibir se a cidade não for encontrada
+  imageLoading: boolean = false;
+  cityImageUrl: string = '';
+
+  private preloadImage(url: string): Promise<void> {
+  this.imageLoading = true;
+
+  const loadImagePromise = new Promise<void>((resolve, reject) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => resolve();
+    img.onerror = () => reject();
+  });
+
+  // Promise que espera 2 segundos
+  const minDelay = new Promise<void>((resolve) => setTimeout(resolve, 2075));
+
+  // Aguarda as duas promessas: carregamento da imagem + delay mínimo de 2s
+  return Promise.all([loadImagePromise, minDelay])
+    .then(() => {
+      this.imageLoading = false;
+    })
+    .catch(() => {
+      this.imageLoading = false;
+    });
+}
+
+
+fetchCityImage(city: string): void {
+  this.weatherService.getCityImage(city).subscribe({
+    next: (data) => {
+      if (data && data.imageUrl) {
+        this.preloadImage(data.imageUrl)
+          .then(() => this.cityImageUrl = data.imageUrl)
+          .catch(() => this.cityImageUrl = '');
+      } else {
+        this.cityImageUrl = '';
+      }
+    },
+    error: () => this.cityImageUrl = ''
+  });
+}
+
 
 
   selectedDayIndex: number = 0; // índice do dia selecionado
@@ -37,6 +79,7 @@ export class WeatherDisplayComponent implements OnInit {
       this.selectedCity = city;
       if (city) {
         this.fetchWeather(city);
+        this.fetchCityImage(city);
         this.showSearchBar = false; 
       } else {
         this.weatherData = null; // Reseta os dados se não houver cidade selecionada
@@ -50,35 +93,45 @@ export class WeatherDisplayComponent implements OnInit {
         queryParams: { city: this.selectedCity }
       });
       this.fetchWeather(this.selectedCity);
+      this.fetchCityImage(this.selectedCity);
     }
   }
 
   private fetchWeather(city: string): void {
-    this.errorMessage = ''; // Reseta mensagem de erro
-    this.weatherService.getForecast(city).subscribe({
-      next: (data: ForecastResponse) => {
-        // Verifica se a cidade foi identificada
-        if (!data || !data.forecast || data.forecast.length === 0) {
-          this.weatherData = null; // Reseta os dados se não houver previsão
-          this.errorMessage = 'Cidade/País não encontrado. Por favor, tente novamente.';
-          return;
-        }
-        // Quando chegar novos dados, resetar seleção para o primeiro dia
-        this.selectedDayIndex = 0;
+  this.errorMessage = ''; 
+  this.imageLoading = true;  // show loading
 
-        // Atualiza classe conforme o primeiro dia
+  const minDelay = new Promise<void>(resolve => setTimeout(resolve, 2500));
+
+  const weatherRequest = new Promise<ForecastResponse>((resolve, reject) => {
+    this.weatherService.getForecast(city).subscribe({
+      next: (data: ForecastResponse) => resolve(data),
+      error: (err) => reject(err)
+    });
+  });
+
+  Promise.all([weatherRequest, minDelay])
+    .then(([data]) => {
+      if (!data || !data.forecast || data.forecast.length === 0) {
+        this.weatherData = null;
+        this.errorMessage = 'Cidade/País não encontrado. Por favor, tente novamente.';
+      } else {
+        this.selectedDayIndex = 0;
         const firstDayDescription = data.forecast.length > 0 ? data.forecast[0].description : '';
         const conditionClass = this.getConditionClass(firstDayDescription);
         this.weatherData = { ...data, conditionClass };
-        this.errorMessage = ''; // Reseta mensagem de erro
-      },
-      error: (error: any) => {
-        console.error('Error fetching weather data:', error);
-        this.weatherData = null;
-        this.errorMessage = 'Não foi possível obter dados. Por favor, insira uma cidade válida.';
+        this.errorMessage = '';
       }
+      this.imageLoading = false;  // hide loading
+    })
+    .catch((error) => {
+      console.error('Error fetching weather data:', error);
+      this.weatherData = null;
+      this.errorMessage = 'Não foi possível obter dados. Por favor, insira uma cidade válida.';
+      this.imageLoading = false;  // hide loading
     });
-  }
+}
+
 
   selectDay(index: number): void {
     this.selectedDayIndex = index;
