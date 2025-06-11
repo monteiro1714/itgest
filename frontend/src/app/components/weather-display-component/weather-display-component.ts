@@ -24,7 +24,7 @@ export class WeatherDisplayComponent implements OnInit {
   weatherData: (ForecastResponse & { conditionClass?: string }) | null = null;
   selectedCity: string = '';
   showSearchBar: boolean = true; 
-  errorMessage: string = ''; // Mensagem de erro para exibir se a cidade não for encontrada
+  errorMessage: string = ''; // Error message to display if the city is not found
   imageLoading: boolean = false;
   cityImageUrl: string = '';
 
@@ -38,10 +38,10 @@ export class WeatherDisplayComponent implements OnInit {
     img.onerror = () => reject();
   });
 
-  // Promise que espera 2 segundos
+  // Promise to wait 2 seconds
   const minDelay = new Promise<void>((resolve) => setTimeout(resolve, 2075));
 
-  // Aguarda as duas promessas: carregamento da imagem + delay mínimo de 2s
+  // Wait for the two promises: image loading + minimum delay of 2s
   return Promise.all([loadImagePromise, minDelay])
     .then(() => {
       this.imageLoading = false;
@@ -69,7 +69,7 @@ fetchCityImage(city: string): void {
 
 
 
-  selectedDayIndex: number = 0; // índice do dia selecionado
+  selectedDayIndex: number = 0; // index of the selected day
 
   
 
@@ -82,7 +82,7 @@ fetchCityImage(city: string): void {
         this.fetchCityImage(city);
         this.showSearchBar = false; 
       } else {
-        this.weatherData = null; // Reseta os dados se não houver cidade selecionada
+        this.weatherData = null; // Resets the data if there is no city selected
       }
     });
   }
@@ -157,16 +157,16 @@ fetchCityImage(city: string): void {
 
 getBarWidth(temp: number): string {
   const min = -10;
-  const max = 45;
+  const max = 40;
   const percent = Math.max(0, Math.min(100, ((temp - min) / (max - min)) * 100));
   return `${percent}%`;
 }
 
 getBarColor(temp: number): string {
-  if (temp <= 0) return '#00bfff';       // Azul claro
-  if (temp <= 15) return '#40e0d0';      // Turquesa
-  if (temp <= 25) return '#f9d423';      // Amarelo
-  if (temp <= 35) return '#fc913a';      // Laranja
-  return '#ff4e50';                      // Vermelho
+  if (temp <= 0) return '#00bfff';       // Light blue
+  if (temp <= 15) return '#40e0d0';      // Turquoise
+  if (temp <= 25) return '#f9d423';      // Yellow
+  if (temp <= 35) return '#fc913a';      // Orange
+  return '#ff4e50';                      // Red
 }
 }

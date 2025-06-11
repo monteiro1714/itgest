@@ -1,11 +1,12 @@
 <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand" style="display: flex; align-items: center; width: 100%;">
+  <div class="navbar-brand-wrapper">
     <a class="navbar-item" href="/">
-      <img src="logo.png" alt="Logo" style="max-height: 3rem;" />
+      <img src="logo.png" alt="Logo" class="logo-image" />
     </a>
-    <div *ngIf="showSearchBar" class="search-container">
+
+    <div *ngIf="showSearchBar" class="search-bar">
       <input 
-        class="modern-input"
+        class="search-input"
         type="text" 
         placeholder="Digite uma cidade"
         [(ngModel)]="selectedCity"
@@ -15,5 +16,16 @@
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </div>
+  </div>
+
+  <div class="navbar-end">
+    <a class="navbar-item nav-link" href="/">
+      <i class="fa-solid fa-house" style="margin-right: 0.5rem;"></i>
+      Home
+    </a>
+    <a class="navbar-item nav-link" routerLink="/about-us">
+      <i class="fa-solid fa-circle-info" style="margin-right: 0.5rem;"></i>
+      Sobre Nós
+    </a>
   </div>
 </nav>
