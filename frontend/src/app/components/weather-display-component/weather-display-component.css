@@ -5,7 +5,6 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
-/* ---------- Mensagem de boas-vindas ---------- */
 .welcome-message {
   position: absolute;
   top: 10%;
@@ -28,7 +27,7 @@
   font-size: 1.5rem;
 }
 
-/* ---------- Mensagem da cidade (após pesquisa) ---------- */
+/* ---------- City message (after search) ---------- */
 .city-message {
   position: absolute;
   top: 10%;
@@ -51,7 +50,6 @@
   font-size: 1.5rem;
 }
 
-/* ---------- Barra de pesquisa ---------- */
 .search-bar {
   position: absolute;
   z-index: 10;
@@ -75,7 +73,7 @@
   position: fixed;
 }
 
-/* Inputs */
+
 .search-input {
   flex-grow: 1;
   font-size: 1.2rem;
@@ -89,7 +87,7 @@
   padding: 0.5rem;
 }
 
-/* Botão */
+
 .search-button {
   font-size: 1.2rem;
   padding: 0.75rem 1.5rem;
@@ -101,7 +99,7 @@
 }
 
 
-/* ---------- Responsivo ---------- */
+
 @media (max-width: 480px) {
   .welcome-message h1,
   .city-message h1 {
@@ -135,8 +133,8 @@
   @media (max-width: 480px) {
   .day-icon {
     order: 1;
-    align-self: center; /* centra o ícone no eixo cruzado (horizontal) */
-    margin-bottom: 0.25rem; /* um pequeno espaçamento abaixo do ícone */
+    align-self: center; 
+    margin-bottom: 0.25rem; 
   }
 }
 
@@ -157,7 +155,7 @@
   }
 }
 
-/* ---------- Estilo minimalista para os itens do dia ---------- */
+
 .day-list-vertical li {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.75rem 0;
@@ -187,21 +185,21 @@
   padding-left: 0.5rem;
 }
 
-/* Estrutura interna do item */
+
 .day-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-/* Dia/Data */
+
 .day-date {
   flex: 1;
   font-size: 1rem;
   font-weight: 500;
 }
 
-/* Ícone do clima */
+
 .day-icon img {
   width: 32px;
   height: 32px;
@@ -213,7 +211,7 @@
   flex: 1;
 }
 
-/* Barra de temperatura */
+
 .temp-bar-container {
   flex: 2;
   height: 6px;
@@ -230,7 +228,7 @@
   transition: width 0.4s ease, background-color 0.4s ease;
 }
 
-/* Temperatura (à direita) */
+
 .day-temp {
   min-width: 50px;
   text-align: right;
@@ -240,20 +238,20 @@
 
 @media (max-width: 480px) {
   .temp-bar-container {
-    width: 100%;          /* Ocupa toda a largura possível */
-    margin: 0.5rem 0;     /* Espaço acima e abaixo */
-    height: 8px;          /* Um pouco mais alta para melhor visibilidade */
-    flex: none;           /* Remove o flex grow para evitar encolhimento */
+    width: 100%;          
+    margin: 0.5rem 0;     
+    height: 8px;          
+    flex: none;           
   }
 
   .temp-bar {
-    min-width: 30%;       /* Garante que a barra não desaparece */
+    min-width: 30%;       
     height: 100%;
     border-radius: 4px;
   }
 
   .day-item {
-    flex-direction: column;  /* Alinha verticalmente para mais espaço */
+    flex-direction: column;  
     align-items: stretch;
   }
 
@@ -266,12 +264,12 @@
 
   .day-temp {
     margin-top: 0.5rem;
-    min-width: auto;       /* Remove restrição para encaixar bem */
+    min-width: auto;       
   }
 }
 
 .error-message {
-  color: #ff4e50; /* vermelho */
+  color: #ff4e50; 
   background-color: rgba(255, 78, 80, 0.1);
   border: 1px solid #ff4e50;
   padding: 1rem;
@@ -288,11 +286,11 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* fundo escuro semi-transparente */
+  background: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* muito acima de tudo */
+  z-index: 9999; 
 }
 
 .loader {
@@ -308,7 +306,7 @@
   animation: mltShdSpin 1.7s infinite ease, round 1.7s infinite ease;
 }
 
-/* As animações continuam as mesmas do seu código */
+
 @keyframes mltShdSpin {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em,

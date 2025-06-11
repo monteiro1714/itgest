@@ -16,13 +16,13 @@
      [ngClass]="{'has-weather': weatherData}">
 
 
-  <!-- Mensagem de boas-vindas (aparece se não tiver dados, mesmo que tenha erro) -->
+  <!-- Welcome message (appears if there is no data, even if there is an error) -->
   <div *ngIf="!weatherData" class="welcome-message">
     <h1>Bem-vindo! 🌤️</h1>
     <p>Pesquise por uma cidade ou país para consultar a previsão do tempo.</p>
   </div>
 
-  <!-- Cidade e previsão (aparece só se houver dados e não houver erro) -->
+  <!-- City and forecast (appears only if there is data and no error) -->
   <div *ngIf="weatherData && !errorMessage" class="city-message has-text-centered">
     <h1>{{ weatherData.city }}, {{ weatherData.country }}</h1>
     
@@ -56,7 +56,7 @@
     </div>
   </div>
 
-  <!-- Barra de pesquisa (aparece se não houver dados ou se houver erro) -->
+  <!-- Search bar (appears if there is no data or if there is an error) -->
   <div *ngIf="!weatherData || errorMessage" class="search-bar" [ngClass]="{'compact': weatherData}">
     <input 
       class="input search-input" 
@@ -68,7 +68,7 @@
     <button class="button is-link search-button" (click)="getWeather()">Pesquisar</button>
   </div>
 
-  <!-- Mensagem de erro (aparece se houver erro) -->
+  <!-- Error message (appears if there is an error) -->
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>

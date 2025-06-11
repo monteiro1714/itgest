@@ -1,0 +1,39 @@
+/* Wrapper for the central area */
+.about-wrapper {
+  height: 100vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Keeps the background image and overlay dark */
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../../../../public/aboutUs.jpg');
+  background-size: cover;
+  background-position: center;
+  
+  text-align: center;
+}
+
+/* Central content with translucent background and blur */
+.about-content {
+  color: white;
+  max-width: 800px;
+  padding: 2rem;
+  border-radius: 8px;
+
+  /* Blur/transparent background same as search bar */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.about-content h1 {
+  font-size: 2.5rem;
+  color: #3273dc;
+  margin-bottom: 1rem;
+}
+
+.about-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}

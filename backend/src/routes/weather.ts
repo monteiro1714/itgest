@@ -6,6 +6,6 @@ const router = Router();
 
 // GET /api/weather/city
 router.get('/:city', fetchWeather);
-router.get('/:city/image', fetchCityImage); // nova rota para imagem
+router.get('/:city/image', fetchCityImage); // new route for fetching city image
 
 export default router;
